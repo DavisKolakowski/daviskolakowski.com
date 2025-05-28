@@ -1,0 +1,145 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 0% 98%; /* #FAFAFA */
+  --foreground: 210 11% 20%; /* #333333 */
+  --muted: 210 11% 96%; /* #F4F4F5 */
+  --muted-foreground: 210 11% 45%; /* #6B7280 */
+  --popover: 0 0% 100%; /* #FFFFFF */
+  --popover-foreground: 210 11% 20%; /* #333333 */
+  --card: 0 0% 100%; /* #FFFFFF */
+  --card-foreground: 210 11% 20%; /* #333333 */
+  --border: 210 11% 90%; /* #E5E7EB */
+  --input: 210 11% 90%; /* #E5E7EB */
+  --primary: 210 100% 54%; /* #0070F3 */
+  --primary-foreground: 210 100% 99%; /* #F0F9FF */
+  --secondary: 0 0% 0%; /* #000000 */
+  --secondary-foreground: 0 0% 100%; /* #FFFFFF */
+  --accent: 328 100% 50%; /* #FF0080 */
+  --accent-foreground: 0 0% 100%; /* #FFFFFF */
+  --destructive: 0 84% 60%; /* #EF4444 */
+  --destructive-foreground: 0 0% 100%; /* #FFFFFF */
+  --ring: 210 100% 54%; /* #0070F3 */
+  --radius: 0.5rem;
+  
+  /* Sidebar variables */
+  --sidebar-width: 16rem;
+  --sidebar-width-mobile: 18rem;
+  --sidebar-width-icon: 3rem;
+}
+
+.dark {
+  --background: 240 10% 4%; /* #0A0A0B */
+  --foreground: 0 0% 98%; /* #FAFAFA */
+  --muted: 240 4% 16%; /* #27272A */
+  --muted-foreground: 240 5% 65%; /* #A1A1AA */
+  --popover: 240 10% 4%; /* #0A0A0B */
+  --popover-foreground: 0 0% 98%; /* #FAFAFA */
+  --card: 240 10% 4%; /* #0A0A0B */
+  --card-foreground: 0 0% 98%; /* #FAFAFA */
+  --border: 240 4% 16%; /* #27272A */
+  --input: 240 4% 16%; /* #27272A */
+  --primary: 210 100% 54%; /* #0070F3 */
+  --primary-foreground: 210 100% 99%; /* #F0F9FF */
+  --secondary: 0 0% 100%; /* #FFFFFF */
+  --secondary-foreground: 0 0% 0%; /* #000000 */
+  --accent: 328 100% 50%; /* #FF0080 */
+  --accent-foreground: 0 0% 100%; /* #FFFFFF */
+  --destructive: 0 63% 31%; /* #7F1D1D */
+  --destructive-foreground: 0 0% 98%; /* #FAFAFA */
+  --ring: 210 100% 54%; /* #0070F3 */
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .section-spacing {
+    @apply py-24;
+  }
+  
+  .container-padding {
+    @apply px-6;
+  }
+  
+  .text-gradient {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .card-shadow {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-shadow-hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+  
+  .transition-smooth {
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .base-spacing {
+    @apply space-y-6;
+  }
+  
+  .nav-link {
+    @apply text-muted-foreground hover:text-primary transition-smooth font-medium;
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-3 rounded-lg font-medium transition-smooth;
+  }
+  
+  .btn-secondary {
+    @apply border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground px-8 py-3 rounded-lg font-medium transition-smooth;
+  }
+}
+
+/* Sidebar utilities */
+.sidebar-mobile-width {
+  --sidebar-width: 18rem;
+}
+
+.sidebar-skeleton-width {
+  --skeleton-width: var(--skeleton-width-value, 75%);
+}
+
+/* Dynamic width classes for sidebar skeleton */
+@layer utilities {
+  [data-skeleton-width] {
+    --skeleton-width: attr(data-skeleton-width %);
+  }
+}
+
+@layer utilities {
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  .backdrop-blur-glass {
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+}
