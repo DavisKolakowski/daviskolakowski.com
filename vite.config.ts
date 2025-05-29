@@ -11,4 +11,13 @@ export default defineConfig({
     },
   },
   assetsInclude: ['**/*.docx'],
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(import.meta.dirname, 'index.html'),
+      },
+    },
+    copyPublicDir: true,
+  },
+  publicDir: 'src/assets',
 });
