@@ -33,11 +33,11 @@ export default function Hero() {
               Hi, I'm <span className="text-gradient">Davis</span>
             </h1>
             <h2 className="text-2xl md:text-3xl text-muted-foreground font-medium">
-              .NET Software Engineer
+              Software Engineer
             </h2>
             <p className="text-lg text-muted-foreground leading-relaxed">
               Experienced Software Engineer with over eight years of expertise in full-stack development, 
-              specializing in web technologies like React, TypeScript, and .NET. Passionate about 
+              specializing in web technologies like React, Vue, TypeScript, and .NET. Passionate about 
               driving user growth through innovative, user-centric solutions.
             </p>
           </div>

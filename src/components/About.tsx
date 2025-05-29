@@ -13,7 +13,7 @@ export default function About() {
           <div className="base-spacing">
             <p className="text-lg leading-relaxed text-muted-foreground">
               With over eight years of expertise in full-stack development, I specialize in creating 
-              scalable web applications using modern technologies like React, TypeScript, and .NET. 
+              scalable web applications using modern technologies like React, Vue, TypeScript, and .NET. 
               I'm passionate about optimizing performance and automating processes to enhance user experiences.
             </p>
             <p className="text-lg leading-relaxed text-muted-foreground">
