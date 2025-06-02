@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Button } from './button';
-import { analyticsConfig } from '@/config/GoogleAnalyticsConfiguration';
 
 interface ConsentPreferences {
   analytics: boolean;
