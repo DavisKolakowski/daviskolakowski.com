@@ -49,12 +49,11 @@ export default function Skills() {
               <div className="text-2xl mb-4 text-primary">
                 <category.icon className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-semibold mb-4 text-secondary">{category.title}</h3>
-              <div className="space-y-2">
+              <h3 className="text-xl font-semibold mb-4 text-secondary">{category.title}</h3>              <div className="flex flex-wrap gap-2">
                 {category.skills.map((skill, skillIndex) => (
                   <span 
                     key={skillIndex}
-                    className="block bg-muted px-3 py-2 rounded-md text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary transition-smooth cursor-default"
+                    className="bg-muted px-3 py-2 rounded-md text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary transition-smooth cursor-default"
                     onMouseEnter={() => handleSkillHover(skill)}
                   >
                     {skill}

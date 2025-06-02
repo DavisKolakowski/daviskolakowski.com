@@ -1,7 +1,8 @@
 {
   "name": "Davis Kolakowski - Software Engineer",
   "short_name": "Davis Kolakowski",
-  "description": "Experienced Software Engineer with 8+ years in full-stack development, specializing in .NET, React, Vue, and TypeScript.",  "icons": [
+  "description": "Experienced Software Engineer with 8+ years in full-stack development, specializing in .NET, React, Vue, and TypeScript. Portfolio showcasing innovative solutions and technical expertise.",
+  "icons": [
     {
       "src": "/android-chrome-192x192.png",
       "sizes": "192x192",

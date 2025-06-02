@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Button } from './button';
 import { Card, CardContent, CardHeader, CardTitle } from './card';
+import { Button } from './button';
+import { analyticsConfig } from '@/config/GoogleAnalyticsConfiguration';
 
 interface AnalyticsEvent {
   timestamp: number;
@@ -13,9 +14,9 @@ interface AnalyticsEvent {
 export function AnalyticsDebug() {
   const [events, setEvents] = useState<AnalyticsEvent[]>([]);
   const [isVisible, setIsVisible] = useState(false);
-  useEffect(() => {
+    useEffect(() => {
     // Only show in development
-    if (import.meta.env.PROD) return;
+    if (!analyticsConfig.shouldShowDebugPanel()) return;
 
     // Override gtag to capture events for debugging
     const originalGtag = window.gtag;
@@ -28,7 +29,7 @@ export function AnalyticsDebug() {
           category: params?.event_category || 'unknown',
           label: params?.event_label,
           value: params?.value
-        }].slice(-20)); // Keep only last 20 events
+        }].slice(-analyticsConfig.debugSettings.maxEvents)); // Use configured max events
       }
       if (originalGtag) {
         originalGtag(command, ...args);
@@ -37,7 +38,8 @@ export function AnalyticsDebug() {
 
     // Show/hide with keyboard shortcut
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+      const shortcut = analyticsConfig.getDebugKeyboardShortcut();
+      if (e.ctrlKey === shortcut.ctrl && e.shiftKey === shortcut.shift && e.key === shortcut.key) {
         setIsVisible(prev => !prev);
       }
     };
@@ -45,7 +47,7 @@ export function AnalyticsDebug() {
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, []);
-  if (import.meta.env.PROD || !isVisible) {
+  if (!analyticsConfig.shouldShowDebugPanel() || !isVisible) {
     return null;
   }
 
@@ -61,9 +63,8 @@ export function AnalyticsDebug() {
           >
             ×
           </Button>
-        </div>
-        <p className="text-xs text-muted-foreground">
-          Press Ctrl+Shift+A to toggle
+        </div>        <p className="text-xs text-muted-foreground">
+          Press {analyticsConfig.debugSettings.keyboardShortcut} to toggle
         </p>
       </CardHeader>
       <CardContent className="overflow-y-auto max-h-48">
@@ -77,7 +78,9 @@ export function AnalyticsDebug() {
                   <span className="text-blue-600">{event.action}</span>
                   <span className="text-gray-500"> | {event.category}</span>
                   {event.label && <span className="text-green-600"> | {event.label}</span>}
-                  {event.value && <span className="text-orange-600"> | {event.value}</span>}
+                  {event.value !== undefined && (
+                    <span className="text-orange-600"> | {event.value}</span>
+                  )}
                 </div>
                 <div className="text-gray-400 text-xs">
                   {new Date(event.timestamp).toLocaleTimeString()}

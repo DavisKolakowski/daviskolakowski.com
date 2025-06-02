@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AnalyticsDebug } from "@/components/ui/analytics-debug";
+import { AnalyticsTest } from "@/components/ui/analytics-test";
 import { CookieConsent } from "@/components/ui/cookie-consent";
 import { initializeAnalytics } from "@/lib/analytics";
 import Home from "@/pages/home";
@@ -17,6 +18,7 @@ function App() {
       <Toaster />
       <Home />
       <AnalyticsDebug />
+      <AnalyticsTest />
       <CookieConsent />
     </TooltipProvider>
   );

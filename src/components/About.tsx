@@ -1,5 +1,6 @@
 import { Briefcase, GraduationCap, MapPin, Clock } from "lucide-react";
 import { useAnalyticsOnView } from "@/hooks/use-analytics";
+import { appConfig } from "@/config/AppConfiguration";
 
 export default function About() {
   const aboutRef = useAnalyticsOnView("about");
@@ -12,34 +13,30 @@ export default function About() {
           <div className="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto"></div>
         </div>
         
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="base-spacing">
+        <div className="grid md:grid-cols-2 gap-12 items-center">          <div className="base-spacing">
             <p className="text-lg leading-relaxed text-muted-foreground">
-              With over eight years of expertise in full-stack development, I specialize in creating 
-              scalable web applications using modern technologies like React, Vue, TypeScript, and .NET. 
-              I'm passionate about optimizing performance and automating processes to enhance user experiences.
+              {appConfig.siteMetadata.description}
             </p>
             <p className="text-lg leading-relaxed text-muted-foreground">
-              At Comcast, I've led critical projects that have resulted in significant efficiency gains, 
+              At {appConfig.personalInfo.company}, I've led critical projects that have resulted in significant efficiency gains, 
               including reducing an 18-hour manual process to just 27 minutes and cutting report development 
               time by 95%. I thrive in collaborative environments and enjoy mentoring junior developers.
             </p>
           </div>
           
           <div className="bg-muted p-8 rounded-xl card-shadow">
-            <h3 className="text-2xl font-semibold mb-6 text-secondary">Quick Facts</h3>
-            <div className="space-y-4">
+            <h3 className="text-2xl font-semibold mb-6 text-secondary">Quick Facts</h3>            <div className="space-y-4">
               <div className="flex items-center space-x-3">
                 <MapPin className="text-primary w-5 h-5" />
-                <span>Williamsport, PA</span>
+                <span>{appConfig.personalInfo.location}</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Clock className="text-primary w-5 h-5" />
-                <span>8+ Years Experience</span>
+                <span>{appConfig.personalInfo.experience}</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Briefcase className="text-primary w-5 h-5" />
-                <span>Software Engineer III at Comcast</span>
+                <span>{appConfig.personalInfo.currentPosition} at {appConfig.personalInfo.company}</span>
               </div>
               <div className="flex items-center space-x-3">
                 <GraduationCap className="text-primary w-5 h-5" />

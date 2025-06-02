@@ -1,4 +1,6 @@
 // Google Analytics utility functions
+import { analyticsConfig } from '@/config/GoogleAnalyticsConfiguration';
+
 declare global {
   interface Window {
     gtag: (command: string, ...args: any[]) => void;
@@ -6,7 +8,7 @@ declare global {
   }
 }
 
-export const GA_TRACKING_ID = 'G-Q1760H3DK9';
+export const GA_TRACKING_ID = analyticsConfig.trackingId;
 
 // Track page views
 export const trackPageView = (url: string) => {
@@ -30,14 +32,24 @@ export const trackEvent = (
       event_label: label,
       value: value,
     });
+    
+    // Console log in development for debugging
+    if (import.meta.env.DEV) {
+      console.log(`📊 Analytics Event:`, {
+        action,
+        category,
+        label,
+        value
+      });
+    }
   }
 };
 
 // Track scroll depth
 export const trackScrollDepth = (percentage: number) => {
   if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', 'scroll_depth', {
-      event_category: 'engagement',
+    window.gtag('event', analyticsConfig.eventActions.SCROLL_DEPTH, {
+      event_category: analyticsConfig.eventCategories.ENGAGEMENT,
       event_label: `${percentage}%`,
       value: percentage,
     });
@@ -47,39 +59,45 @@ export const trackScrollDepth = (percentage: number) => {
 // Track specific portfolio events
 export const trackPortfolioEvent = {
   // Contact form interactions
-  contactFormSubmit: () => trackEvent('submit', 'contact_form', 'Contact Form'),
-  contactFormStart: () => trackEvent('start', 'contact_form', 'Contact Form Started'),
+  contactFormSubmit: () => trackEvent(analyticsConfig.eventActions.SUBMIT, analyticsConfig.eventCategories.CONTACT_FORM, 'Contact Form'),
+  contactFormStart: () => trackEvent(analyticsConfig.eventActions.START, analyticsConfig.eventCategories.CONTACT_FORM, 'Contact Form Started'),
   
   // Project interactions
-  projectView: (projectName: string) => trackEvent('view', 'project', projectName),
+  projectView: (projectName: string) => trackEvent(analyticsConfig.eventActions.VIEW, analyticsConfig.eventCategories.PROJECT, projectName),
   projectLinkClick: (projectName: string, linkType: 'demo' | 'github') => 
-    trackEvent('click', 'project_link', `${projectName}_${linkType}`),
+    trackEvent(analyticsConfig.eventActions.CLICK, analyticsConfig.eventCategories.PROJECT_LINK, `${projectName}_${linkType}`),
   
   // Resume/CV interactions
-  resumeDownload: () => trackEvent('download', 'resume', 'Resume PDF'),
-  resumeView: () => trackEvent('view', 'resume', 'Resume View'),
+  resumeDownload: () => trackEvent(analyticsConfig.eventActions.DOWNLOAD, analyticsConfig.eventCategories.RESUME, 'Resume PDF'),
+  resumeView: () => trackEvent(analyticsConfig.eventActions.VIEW, analyticsConfig.eventCategories.RESUME, 'Resume View'),
   
   // Social media clicks
-  socialClick: (platform: string) => trackEvent('click', 'social', platform),
+  socialClick: (platform: string) => trackEvent(analyticsConfig.eventActions.CLICK, analyticsConfig.eventCategories.SOCIAL, platform),
   
   // Navigation
-  sectionView: (section: string) => trackEvent('view', 'section', section),
+  sectionView: (section: string) => trackEvent(analyticsConfig.eventActions.VIEW, analyticsConfig.eventCategories.SECTION, section),
   
   // Skills interaction
-  skillHover: (skill: string) => trackEvent('hover', 'skill', skill),
+  skillHover: (skill: string) => trackEvent(analyticsConfig.eventActions.HOVER, analyticsConfig.eventCategories.SKILL, skill),
 
   // Performance metrics
-  timeOnSite: (seconds: number) => trackEvent('timing', 'engagement', 'Time on Site', seconds),
+  timeOnSite: (seconds: number) => trackEvent(analyticsConfig.eventActions.TIMING, analyticsConfig.eventCategories.ENGAGEMENT, 'Time on Site', seconds),
   
   // Error tracking
   errorOccurred: (errorType: string, errorMessage: string) => 
-    trackEvent('exception', 'error', `${errorType}: ${errorMessage}`),
+    trackEvent(analyticsConfig.eventActions.TIMING, analyticsConfig.eventCategories.ERROR, `${errorType}: ${errorMessage}`),
 };
 
 // Initialize analytics (call this in your main App component)
 export const initializeAnalytics = () => {
   // Track initial page load
   if (typeof window !== 'undefined') {
+    // In development, automatically grant consent for testing
+    if (import.meta.env.DEV) {
+      window.gtag('consent', 'update', analyticsConfig.getConsentSettings(true));
+      console.log('🔧 Development mode: Analytics consent automatically granted for testing');
+    }
+    
     trackPageView(window.location.pathname + window.location.search);
 
     // Track time on site
@@ -99,7 +117,7 @@ export const initializeAnalytics = () => {
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const scrollPercent = Math.round((scrollTop / docHeight) * 100);
       
-      if (scrollPercent > maxScrollDepth && scrollPercent % 25 === 0) {
+      if (scrollPercent > maxScrollDepth && analyticsConfig.isScrollDepthInterval(scrollPercent)) {
         maxScrollDepth = scrollPercent;
         trackScrollDepth(scrollPercent);
       }

@@ -1,6 +1,7 @@
 import { ArrowRight, MapPin, Mail } from "lucide-react";
 import { useAnalyticsOnView } from "@/hooks/use-analytics";
 import { trackEvent } from "@/lib/analytics";
+import { appConfig } from "@/config/AppConfiguration";
 
 export default function Hero() {
   const heroRef = useAnalyticsOnView("hero");
@@ -37,17 +38,14 @@ export default function Hero() {
     >
       <div className="max-w-6xl mx-auto container-padding grid md:grid-cols-2 gap-12 items-center">
         <div className="space-y-8">
-          <div className="space-y-6">
-            <h1 className="text-5xl md:text-6xl font-bold leading-tight">
-              Hi, I'm <span className="text-gradient">Davis</span>
+          <div className="space-y-6">            <h1 className="text-5xl md:text-6xl font-bold leading-tight">
+              Hi, I'm <span className="text-gradient">{appConfig.personalInfo.name.split(' ')[0]}</span>
             </h1>
             <h2 className="text-2xl md:text-3xl text-muted-foreground font-medium">
-              Software Engineer
+              {appConfig.personalInfo.title}
             </h2>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Experienced Software Engineer with over eight years of expertise in full-stack development, 
-              specializing in web technologies like React, Vue, TypeScript, and .NET. Passionate about 
-              driving user growth through innovative, user-centric solutions.
+              {appConfig.siteMetadata.description}
             </p>
           </div>
           
@@ -65,16 +63,14 @@ export default function Hero() {
             >
               Get In Touch
             </button>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-6 pt-4 text-sm text-muted-foreground">
+          </div>          <div className="flex flex-col sm:flex-row gap-6 pt-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <MapPin className="w-4 h-4" />
-              <span>Williamsport, PA</span>
+              <span>{appConfig.personalInfo.location}</span>
             </div>
             <div className="flex items-center gap-2">
               <Mail className="w-4 h-4" />
-              <span>contact@daviskolakowski.com</span>
+              <span>{appConfig.personalInfo.email}</span>
             </div>
           </div>
         </div>
@@ -82,8 +78,8 @@ export default function Hero() {
         <div className="flex justify-center">
           <div className="relative">
             <div className="w-80 h-80 bg-gradient-to-br from-primary to-accent rounded-full absolute -inset-2 animate-float opacity-20"></div>            <img 
-              src="/ProfilePicture.jpg"
-              alt="Davis Kolakowski - Professional Profile" 
+              src={appConfig.assetPaths.profileImage}
+              alt={`${appConfig.personalInfo.name} - Professional Profile`} 
               className="w-80 h-80 rounded-full object-cover border-4 border-card card-shadow-hover relative z-10"
             />
           </div>

@@ -29,7 +29,28 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-      <!-- Google tag (gtag.js) with Consent Mode -->
+    
+    <!-- Configuration -->
+    <script src="/config.js"></script>    <!-- Google tag (gtag.js) with Consent Mode -->
+    <script>
+      // Use configuration from config.js
+      const gaConfig = window.APP_CONFIG.analytics;
+      const siteConfig = window.APP_CONFIG.siteMetadata;
+      
+      // Update document title
+      document.title = siteConfig.title;
+      
+      // Update meta tags
+      document.querySelector('meta[name="description"]').content = siteConfig.description;
+      document.querySelector('meta[name="keywords"]').content = siteConfig.keywords;
+      document.querySelector('meta[property="og:title"]').content = siteConfig.title;
+      document.querySelector('meta[property="og:description"]').content = siteConfig.description;
+      document.querySelector('meta[property="og:url"]').content = siteConfig.url;
+      document.querySelector('meta[property="twitter:title"]').content = siteConfig.title;
+      document.querySelector('meta[property="twitter:description"]').content = siteConfig.description;
+      document.querySelector('meta[property="twitter:url"]').content = siteConfig.url;
+      document.querySelector('meta[name="theme-color"]').content = siteConfig.themeColor;
+    </script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1760H3DK9"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -37,20 +58,9 @@
       gtag('js', new Date());
 
       // Initialize consent mode with default denied state for GDPR compliance
-      gtag('consent', 'default', {
-        analytics_storage: 'denied',
-        ad_storage: 'denied',
-        functionality_storage: 'granted',
-        personalization_storage: 'denied',
-        security_storage: 'granted',
-        wait_for_update: 500
-      });
+      gtag('consent', 'default', gaConfig.consentSettings);
 
-      gtag('config', 'G-Q1760H3DK9', {
-        anonymize_ip: true,
-        allow_google_signals: false,
-        allow_ad_personalization_signals: false
-      });
+      gtag('config', gaConfig.trackingId, gaConfig.analyticsSettings);
     </script>
   </head>
   <body>

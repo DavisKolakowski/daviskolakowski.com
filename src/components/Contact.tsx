@@ -3,6 +3,7 @@ import { LinkedInIcon } from "./ui/linkedin-icon";
 import { GitHubIcon } from "./ui/github-icon";
 import { useAnalyticsOnView } from "@/hooks/use-analytics";
 import { trackPortfolioEvent } from "@/lib/analytics";
+import { appConfig } from "@/config/AppConfiguration";
 
 export default function Contact() {
   const contactRef = useAnalyticsOnView("contact");
@@ -43,11 +44,11 @@ export default function Contact() {
               <Mail className="text-primary w-6 h-6" />
             </div>            <h3 className="text-lg font-semibold mb-2 text-secondary">Email</h3>
             <a 
-              href="mailto:contact@daviskolakowski.com"
+              href={appConfig.getMailtoLink()}
               onClick={handleEmailClick}
               className="text-muted-foreground hover:text-primary transition-smooth"
             >
-              contact@daviskolakowski.com
+              {appConfig.personalInfo.email}
             </a>
           </div>
           
@@ -56,13 +57,11 @@ export default function Contact() {
               <LinkedInIcon className="text-primary w-6 h-6" />
             </div>            <h3 className="text-lg font-semibold mb-2 text-secondary">LinkedIn</h3>
             <a 
-              href="https://www.linkedin.com/in/davis-kolakowski"
-              target="_blank"
-              rel="noopener noreferrer"
+              {...appConfig.getSocialLinkProps('linkedin')}
               onClick={handleLinkedInClick}
               className="text-muted-foreground hover:text-primary transition-smooth"
             >
-              linkedin.com/in/davis-kolakowski
+              {appConfig.socialLinks.linkedin.username}
             </a>
           </div>
           
@@ -71,27 +70,23 @@ export default function Contact() {
               <GitHubIcon className="text-primary w-6 h-6" />
             </div>            <h3 className="text-lg font-semibold mb-2 text-secondary">GitHub</h3>
             <a 
-              href="https://github.com/daviskolakowski"
-              target="_blank"
-              rel="noopener noreferrer"
+              {...appConfig.getSocialLinkProps('github')}
               onClick={handleGitHubClick}
               className="text-muted-foreground hover:text-primary transition-smooth"
             >
-              github.com/daviskolakowski
+              {appConfig.socialLinks.github.username}
             </a>
           </div>
         </div>
-          <div className="flex justify-center gap-4">
-          <a 
-            href="mailto:contact@daviskolakowski.com"
+          <div className="flex justify-center gap-4">          <a 
+            href={appConfig.getMailtoLink()}
             onClick={handleSendMessageClick}
             className="btn-primary inline-flex items-center justify-center transform hover:scale-105 min-w-[160px]"
           >
             <Send className="mr-2 w-4 h-4" />
             Send Message
           </a>          <a 
-            href="/DavisJacobKolakowski_Resume.docx"
-            download="DavisJacobKolakowski_Resume.docx"
+            {...appConfig.getResumeDownloadProps()}
             onClick={handleResumeDownload}
             className="btn-secondary inline-flex items-center justify-center transform hover:scale-105 min-w-[160px]"
           >

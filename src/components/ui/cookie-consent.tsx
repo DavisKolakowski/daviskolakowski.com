@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button } from './button';
+import { analyticsConfig } from '@/config/GoogleAnalyticsConfiguration';
 
 interface ConsentPreferences {
   analytics: boolean;
@@ -13,21 +14,34 @@ export function CookieConsent() {
   useEffect(() => {
     const consent = localStorage.getItem('cookie-consent');
     if (!consent) {
-      setIsVisible(true);
+      // In development mode, show a notice that consent is auto-granted
+      if (import.meta.env.DEV) {
+        console.log('🔧 Development mode: Cookie consent automatically granted for testing');
+        const devConsent = {
+          analytics: true,
+          marketing: false,
+          functional: true,
+        };
+        localStorage.setItem('cookie-consent', JSON.stringify(devConsent));
+        updateGoogleConsent(devConsent);
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
     } else {
       const savedPreferences = JSON.parse(consent);
       updateGoogleConsent(savedPreferences);
     }
   }, []);
-
   const updateGoogleConsent = (prefs: ConsentPreferences) => {
     if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('consent', 'update', {
+      const consentSettings = {
         analytics_storage: prefs.analytics ? 'granted' : 'denied',
         ad_storage: prefs.marketing ? 'granted' : 'denied',
         functionality_storage: prefs.functional ? 'granted' : 'denied',
         personalization_storage: prefs.marketing ? 'granted' : 'denied',
-      });
+      };
+      window.gtag('consent', 'update', consentSettings);
     }
   };
 
@@ -52,6 +66,19 @@ export function CookieConsent() {
     updateGoogleConsent(minimalConsent);
     setIsVisible(false);
   };
+
+  // In development, show a banner indicating auto-consent
+  if (import.meta.env.DEV && !isVisible) {
+    return (
+      <div className="fixed top-4 right-4 max-w-sm z-50 bg-yellow-100 border border-yellow-400 text-yellow-800 p-3 rounded-lg shadow-lg text-xs">
+        <div className="font-semibold">🔧 Development Mode</div>
+        <div>Analytics consent auto-granted for testing</div>
+        <div className="text-xs mt-1 opacity-75">
+          Press Ctrl+Shift+A for debug panel
+        </div>
+      </div>
+    );
+  }
 
   if (!isVisible) return null;
 
