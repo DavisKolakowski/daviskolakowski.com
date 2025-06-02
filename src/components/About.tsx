@@ -1,8 +1,11 @@
 import { Briefcase, GraduationCap, MapPin, Clock } from "lucide-react";
+import { useAnalyticsOnView } from "@/hooks/use-analytics";
 
 export default function About() {
+  const aboutRef = useAnalyticsOnView("about");
+
   return (
-    <section id="about" className="section-spacing bg-card">
+    <section id="about" ref={aboutRef} className="section-spacing bg-card">
       <div className="max-w-6xl mx-auto container-padding">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold mb-4 text-secondary">About Me</h2>

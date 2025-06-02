@@ -21,13 +21,10 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "forceConsistentCasingInFileNames": true,
-
-    /* Paths */
+    "forceConsistentCasingInFileNames": true,    /* Paths */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@assets/*": ["./src/assets/*"]
+      "@/*": ["./src/*"]
     },
 
     "types": ["vite/client"]

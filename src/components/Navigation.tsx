@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import { trackEvent } from "@/lib/analytics";
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,6 +28,7 @@ export default function Navigation() {
   }, []);
 
   const scrollToSection = (sectionId: string) => {
+    trackEvent('click', 'navigation', `Menu - ${sectionId}`);
     const element = document.getElementById(sectionId);
     if (element) {
       const offsetTop = element.offsetTop - 80;
@@ -36,6 +38,13 @@ export default function Navigation() {
       });
     }
     setIsMenuOpen(false);
+  };
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+    if (!isMenuOpen) {
+      trackEvent('click', 'navigation', 'Mobile Menu Open');
+    }
   };
 
   const navItems = [
@@ -73,7 +82,7 @@ export default function Navigation() {
           {/* Mobile Menu Button */}
           <button
             className="md:hidden text-foreground hover:text-primary transition-smooth"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onClick={toggleMenu}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>

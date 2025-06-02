@@ -1,6 +1,10 @@
 import { Code, Layers, Database, Cloud } from "lucide-react";
+import { useAnalyticsOnView } from "@/hooks/use-analytics";
+import { trackPortfolioEvent } from "@/lib/analytics";
 
 export default function Skills() {
+  const skillsRef = useAnalyticsOnView("skills");
+
   const skillCategories = [
     {
       icon: Code,
@@ -24,8 +28,12 @@ export default function Skills() {
     }
   ];
 
+  const handleSkillHover = (skill: string) => {
+    trackPortfolioEvent.skillHover(skill);
+  };
+
   return (
-    <section id="skills" className="section-spacing bg-background">
+    <section id="skills" ref={skillsRef} className="section-spacing bg-background">
       <div className="max-w-6xl mx-auto container-padding">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold mb-4 text-secondary">Technical Skills</h2>
@@ -33,30 +41,28 @@ export default function Skills() {
         </div>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {skillCategories.map((category, index) => {
-            const IconComponent = category.icon;
-            return (
-              <div 
-                key={index}
-                className="bg-card p-6 rounded-xl card-shadow hover:card-shadow-hover transition-smooth"
-              >
-                <div className="text-2xl mb-4 text-primary">
-                  <IconComponent className="w-8 h-8" />
-                </div>
-                <h3 className="text-xl font-semibold mb-4 text-secondary">{category.title}</h3>
-                <div className="space-y-2">
-                  {category.skills.map((skill, skillIndex) => (
-                    <span 
-                      key={skillIndex}
-                      className="inline-block bg-muted text-foreground px-3 py-1 rounded-full text-sm mr-2 mb-2"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
+          {skillCategories.map((category, index) => (
+            <div 
+              key={index}
+              className="bg-card p-6 rounded-xl card-shadow hover:card-shadow-hover transition-smooth"
+            >
+              <div className="text-2xl mb-4 text-primary">
+                <category.icon className="w-8 h-8" />
               </div>
-            );
-          })}
+              <h3 className="text-xl font-semibold mb-4 text-secondary">{category.title}</h3>
+              <div className="space-y-2">
+                {category.skills.map((skill, skillIndex) => (
+                  <span 
+                    key={skillIndex}
+                    className="block bg-muted px-3 py-2 rounded-md text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary transition-smooth cursor-default"
+                    onMouseEnter={() => handleSkillHover(skill)}
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

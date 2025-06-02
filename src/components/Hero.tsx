@@ -1,8 +1,12 @@
 import { ArrowRight, MapPin, Mail } from "lucide-react";
-import profilePicture from "@assets/ProfilePicture.jpg";
+import { useAnalyticsOnView } from "@/hooks/use-analytics";
+import { trackEvent } from "@/lib/analytics";
 
 export default function Hero() {
+  const heroRef = useAnalyticsOnView("hero");
+
   const scrollToProjects = () => {
+    trackEvent('click', 'navigation', 'Hero CTA - View My Work');
     const element = document.getElementById("projects");
     if (element) {
       const offsetTop = element.offsetTop - 80;
@@ -14,6 +18,7 @@ export default function Hero() {
   };
 
   const scrollToContact = () => {
+    trackEvent('click', 'navigation', 'Hero CTA - Get In Touch');
     const element = document.getElementById("contact");
     if (element) {
       const offsetTop = element.offsetTop - 80;
@@ -25,7 +30,11 @@ export default function Hero() {
   };
 
   return (
-    <section id="hero" className="min-h-screen bg-gradient-to-br from-background to-muted flex items-center justify-center pt-20">
+    <section 
+      id="hero" 
+      ref={heroRef}
+      className="min-h-screen bg-gradient-to-br from-background to-muted flex items-center justify-center pt-20"
+    >
       <div className="max-w-6xl mx-auto container-padding grid md:grid-cols-2 gap-12 items-center">
         <div className="space-y-8">
           <div className="space-y-6">
@@ -72,9 +81,8 @@ export default function Hero() {
         
         <div className="flex justify-center">
           <div className="relative">
-            <div className="w-80 h-80 bg-gradient-to-br from-primary to-accent rounded-full absolute -inset-2 animate-float opacity-20"></div>
-            <img 
-              src={profilePicture}
+            <div className="w-80 h-80 bg-gradient-to-br from-primary to-accent rounded-full absolute -inset-2 animate-float opacity-20"></div>            <img 
+              src="/ProfilePicture.jpg"
               alt="Davis Kolakowski - Professional Profile" 
               className="w-80 h-80 rounded-full object-cover border-4 border-card card-shadow-hover relative z-10"
             />

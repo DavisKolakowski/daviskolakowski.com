@@ -1,4 +1,8 @@
+import { useAnalyticsOnView } from "@/hooks/use-analytics";
+
 export default function Experience() {
+  const experienceRef = useAnalyticsOnView("experience");
+
   const experiences = [
     {
       title: "Software Engineer III",
@@ -36,7 +40,7 @@ export default function Experience() {
   ];
 
   return (
-    <section id="experience" className="section-spacing bg-card">
+    <section id="experience" ref={experienceRef} className="section-spacing bg-card">
       <div className="max-w-6xl mx-auto container-padding">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold mb-4 text-secondary">Professional Experience</h2>

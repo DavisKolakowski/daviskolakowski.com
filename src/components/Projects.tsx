@@ -1,7 +1,11 @@
 import { ExternalLink } from "lucide-react";
 import { GitHubIcon } from "./ui/github-icon";
+import { useAnalyticsOnView } from "@/hooks/use-analytics";
+import { trackPortfolioEvent } from "@/lib/analytics";
 
 export default function Projects() {
+  const projectsRef = useAnalyticsOnView("projects");
+
   const projects = [
     {
       title: "Linear Content Automation Platform",
@@ -49,8 +53,16 @@ export default function Projects() {
     }
   ];
 
+  const handleProjectLinkClick = (projectTitle: string) => {
+    trackPortfolioEvent.projectLinkClick(projectTitle, 'github');
+  };
+
+  const handleProjectView = (projectTitle: string) => {
+    trackPortfolioEvent.projectView(projectTitle);
+  };
+
   return (
-    <section id="projects" className="section-spacing bg-background">
+    <section id="projects" ref={projectsRef} className="section-spacing bg-background">
       <div className="max-w-6xl mx-auto container-padding">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold mb-4 text-secondary">Featured Projects</h2>
@@ -62,6 +74,7 @@ export default function Projects() {
             <div 
               key={index}
               className="bg-card p-8 rounded-xl card-shadow hover:card-shadow-hover transition-smooth group flex flex-col h-full"
+              onMouseEnter={() => handleProjectView(project.title)}
             >
               <div className="flex items-start justify-between mb-4">
                 <h3 className="text-2xl font-bold text-secondary group-hover:text-primary transition-smooth">
@@ -74,6 +87,7 @@ export default function Projects() {
                   className="text-muted-foreground hover:text-primary transition-smooth"
                   aria-label={`View ${project.title} on GitHub`}
                   title={`View ${project.title} on GitHub`}
+                  onClick={() => handleProjectLinkClick(project.title)}
                 >
                   <GitHubIcon className="w-6 h-6" />
                 </a>
@@ -109,6 +123,7 @@ export default function Projects() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center text-accent font-semibold hover:text-primary transition-smooth cursor-pointer"
+                  onClick={() => handleProjectLinkClick(project.title)}
                 >
                   <span>View Project</span>
                   <ExternalLink className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />

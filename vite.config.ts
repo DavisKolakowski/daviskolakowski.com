@@ -7,7 +7,6 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "src"),
-      "@assets": path.resolve(import.meta.dirname, "src/assets"),
     },
   },
   assetsInclude: ['**/*.docx'],
@@ -19,5 +18,5 @@ export default defineConfig({
     },
     copyPublicDir: true,
   },
-  publicDir: 'src/assets',
+  publicDir: 'public',
 });
