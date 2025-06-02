@@ -6,7 +6,6 @@ interface UseAnalyticsOptions {
   trackOnce?: boolean;
 }
 
-// Hook to track when sections come into view
 export const useAnalyticsOnView = (
   sectionName: string,
   options: UseAnalyticsOptions = {}
@@ -39,13 +38,12 @@ export const useAnalyticsOnView = (
   return ref;
 };
 
-// Hook to track clicks on elements
 export const useAnalyticsClick = (
   eventAction: string,
   eventCategory: string,
   eventLabel?: string
 ) => {
-  return (event?: React.MouseEvent) => {
+  return () => {
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', eventAction, {
         event_category: eventCategory,
