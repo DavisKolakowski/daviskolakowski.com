@@ -5,7 +5,6 @@ import { trackEvent } from "@/lib/analytics";
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
-
   useEffect(() => {
     const handleScroll = () => {
       const sections = ["hero", "about", "skills", "experience", "projects", "contact"];
@@ -17,18 +16,44 @@ export default function Navigation() {
           const { offsetTop, offsetHeight } = element;
           if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
             setActiveSection(section);
+            // Update URL hash if it doesn't match the current section
+            const currentHash = window.location.hash.substring(1);
+            if (currentHash !== section) {
+              window.history.replaceState(null, '', `#${section}`);
+            }
             break;
           }
         }
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    const handleHashChange = () => {
+      const hash = window.location.hash.substring(1);
+      if (hash && ["hero", "about", "skills", "experience", "projects", "contact"].includes(hash)) {
+        setActiveSection(hash);
+      }
+    };
 
+    // Set initial active section based on hash
+    const initialHash = window.location.hash.substring(1);
+    if (initialHash && ["hero", "about", "skills", "experience", "projects", "contact"].includes(initialHash)) {
+      setActiveSection(initialHash);
+    }
+
+    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("hashchange", handleHashChange);
+    
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("hashchange", handleHashChange);
+    };
+  }, []);
   const scrollToSection = (sectionId: string) => {
     trackEvent('click', 'navigation', `Menu - ${sectionId}`);
+    
+    // Update URL hash
+    window.history.pushState(null, '', `#${sectionId}`);
+    
     const element = document.getElementById(sectionId);
     if (element) {
       const offsetTop = element.offsetTop - 80;

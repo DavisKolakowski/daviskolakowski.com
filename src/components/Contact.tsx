@@ -88,7 +88,7 @@ export default function Contact() {
           </a>          <a 
             {...appConfig.getResumeDownloadProps()}
             onClick={handleResumeDownload}
-            className="btn-secondary inline-flex items-center justify-center transform hover:scale-105 min-w-[160px]"
+            className="btn-secondary-dark inline-flex items-center justify-center transform hover:scale-105 min-w-[160px]"
           >
             <Download className="mr-2 w-4 h-4" />
             Download Resume
