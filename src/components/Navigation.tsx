@@ -16,7 +16,6 @@ export default function Navigation() {
           const { offsetTop, offsetHeight } = element;
           if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
             setActiveSection(section);
-            // Update URL hash if it doesn't match the current section
             const currentHash = window.location.hash.substring(1);
             if (currentHash !== section) {
               window.history.replaceState(null, '', `#${section}`);
@@ -34,7 +33,6 @@ export default function Navigation() {
       }
     };
 
-    // Set initial active section based on hash
     const initialHash = window.location.hash.substring(1);
     if (initialHash && ["hero", "about", "skills", "experience", "projects", "contact"].includes(initialHash)) {
       setActiveSection(initialHash);
@@ -51,7 +49,6 @@ export default function Navigation() {
   const scrollToSection = (sectionId: string) => {
     trackEvent('click', 'navigation', `Menu - ${sectionId}`);
     
-    // Update URL hash
     window.history.pushState(null, '', `#${sectionId}`);
     
     const element = document.getElementById(sectionId);

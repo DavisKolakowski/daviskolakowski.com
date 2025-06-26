@@ -54,13 +54,35 @@ export const useAnalyticsOnView = (
 export const useAnalyticsClick = (
   eventAction: string,
   eventCategory: string,
-  eventLabel?: string
+  eventLabel?: string,
+  eventValue?: number
 ) => {
   return () => {
     if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', eventAction, {
-        event_category: eventCategory,
-        event_label: eventLabel,
+      try {
+        window.gtag('event', eventAction, {
+          event_category: eventCategory,
+          event_label: eventLabel,
+          value: eventValue,
+        });
+        
+        // Debug logging in development
+        if (import.meta.env.DEV) {
+          console.log(`🖱️ Click tracked:`, {
+            action: eventAction,
+            category: eventCategory,
+            label: eventLabel,
+            value: eventValue
+          });
+        }
+      } catch (error) {
+        console.error('❌ Click tracking error:', error);
+      }
+    } else {
+      console.warn('⚠️ Analytics not available for click event:', {
+        action: eventAction,
+        category: eventCategory,
+        label: eventLabel
       });
     }
   };

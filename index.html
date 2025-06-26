@@ -31,19 +31,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <!-- Configuration -->
-    <script src="/config.js"></script>    <!-- Google tag (gtag.js) with Consent Mode -->
+    <script src="/config.js"></script>    <!-- Google Analytics (Simple Setup) -->
     <script>
-      // Ensure dataLayer exists first
+      // Initialize dataLayer
       window.dataLayer = window.dataLayer || [];
       
       // Use configuration from config.js
       const gaConfig = window.APP_CONFIG.analytics;
       const siteConfig = window.APP_CONFIG.siteMetadata;
       
-      // Update document title
+      // Update document meta tags
       document.title = siteConfig.title;
-      
-      // Update meta tags
       document.querySelector('meta[name="description"]').content = siteConfig.description;
       document.querySelector('meta[name="keywords"]').content = siteConfig.keywords;
       document.querySelector('meta[property="og:title"]').content = siteConfig.title;
@@ -53,35 +51,27 @@
       document.querySelector('meta[property="twitter:description"]').content = siteConfig.description;
       document.querySelector('meta[property="twitter:url"]').content = siteConfig.url;
       document.querySelector('meta[name="theme-color"]').content = siteConfig.themeColor;
-    </script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1760H3DK9"></script>
-    <script>
+      
       // gtag function definition
       function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      // Initialize consent mode with default denied state for GDPR compliance
-      gtag('consent', 'default', gaConfig.consentSettings);
-
-      // Configure GA with enhanced settings
-      gtag('config', gaConfig.trackingId, {
-        ...gaConfig.analyticsSettings,
-        // Add enhanced measurement settings
-        enhanced_measurement: true,
-        page_location: window.location.href,
-        page_title: document.title,
-        send_page_view: true
-      });
       
-      // Debug logging in development
+      // Initialize Google Analytics
+      gtag('js', new Date());
+      gtag('config', gaConfig.trackingId, gaConfig.analyticsSettings);
+      
+      // Store flags for React app
+      window.GA_CONFIG_READY = true;
+      window.GA_SCRIPT_LOADED = false;
+      
+      // Debug logging
       if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        console.log('🔧 GA initialized with config:', {
+        console.log('🔧 GA initialized:', {
           trackingId: gaConfig.trackingId,
-          consent: gaConfig.consentSettings,
-          analytics: gaConfig.analyticsSettings
+          settings: gaConfig.analyticsSettings
         });
       }
     </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1760H3DK9" onload="window.GA_SCRIPT_LOADED = true;"></script>
   </head>
   <body>
     <div id="root"></div>

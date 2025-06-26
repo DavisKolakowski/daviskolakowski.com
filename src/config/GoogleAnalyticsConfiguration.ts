@@ -1,21 +1,13 @@
 /**
  * Google Analytics Configuration
- * Central configuration for Google Analytics settings and tracking
+ * Simplified configuration for Google Analytics tracking
  */
-
-export interface ConsentSettings {
-  analytics_storage: 'granted' | 'denied';
-  ad_storage: 'granted' | 'denied';
-  functionality_storage: 'granted' | 'denied';
-  personalization_storage: 'granted' | 'denied';
-  security_storage: 'granted' | 'denied';
-  wait_for_update?: number;
-}
 
 export interface AnalyticsSettings {
   anonymize_ip: boolean;
   allow_google_signals: boolean;
   allow_ad_personalization_signals: boolean;
+  send_page_view: boolean;
 }
 
 export interface DebugSettings {
@@ -37,27 +29,11 @@ class GoogleAnalyticsConfiguration {
   
   public readonly streamId: string = '11299271420';
 
-  public readonly defaultConsentSettings: ConsentSettings = {
-    analytics_storage: 'granted', // Changed to granted by default for better data collection
-    ad_storage: 'denied',
-    functionality_storage: 'granted',
-    personalization_storage: 'denied',
-    security_storage: 'granted',
-    wait_for_update: 500
-  };
-
-  public readonly developmentConsentSettings: ConsentSettings = {
-    analytics_storage: 'granted',
-    ad_storage: 'granted',
-    functionality_storage: 'granted',
-    personalization_storage: 'granted',
-    security_storage: 'granted'
-  };
-
   public readonly analyticsSettings: AnalyticsSettings = {
     anonymize_ip: true,
-    allow_google_signals: true, // Enable for better insights
-    allow_ad_personalization_signals: false
+    allow_google_signals: true,
+    allow_ad_personalization_signals: false,
+    send_page_view: true
   };
 
   public readonly debugSettings: DebugSettings = {
@@ -95,10 +71,6 @@ class GoogleAnalyticsConfiguration {
     TIMING: 'timing',
     SCROLL_DEPTH: 'scroll_depth'
   } as const;
-
-  public getConsentSettings(isDevelopment: boolean = false): ConsentSettings {
-    return isDevelopment ? this.developmentConsentSettings : this.defaultConsentSettings;
-  }
 
   public getGtagConfigSettings() {
     return {

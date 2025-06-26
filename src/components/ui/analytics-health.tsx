@@ -16,8 +16,7 @@ export function AnalyticsHealth() {
   const runHealthChecks = () => {
     const checks: HealthCheck[] = [];
 
-    // Check if gtag is available
-    if (typeof window !== 'undefined' && window.gtag) {
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
       checks.push({
         name: 'gtag Function',
         status: 'pass',
@@ -31,7 +30,6 @@ export function AnalyticsHealth() {
       });
     }
 
-    // Check if dataLayer exists
     if (typeof window !== 'undefined' && Array.isArray(window.dataLayer)) {
       checks.push({
         name: 'dataLayer',
@@ -46,31 +44,12 @@ export function AnalyticsHealth() {
       });
     }
 
-    // Check consent settings
-    const consent = localStorage.getItem('cookie-consent');
-    if (consent) {
-      const parsed = JSON.parse(consent);
-      checks.push({
-        name: 'Cookie Consent',
-        status: parsed.analytics ? 'pass' : 'warning',
-        message: `Analytics consent: ${parsed.analytics ? 'granted' : 'denied'}`
-      });
-    } else {
-      checks.push({
-        name: 'Cookie Consent',
-        status: 'warning',
-        message: 'No consent preferences stored'
-      });
-    }
-
-    // Check tracking ID
     checks.push({
       name: 'Tracking ID',
       status: 'pass',
       message: `Using ${analyticsConfig.trackingId}`
     });
 
-    // Check network connectivity (basic)
     if (navigator.onLine) {
       checks.push({
         name: 'Network',
@@ -85,10 +64,8 @@ export function AnalyticsHealth() {
       });
     }
 
-    // Check if analytics is blocked (ad blocker detection)
-    if (typeof window !== 'undefined' && window.gtag) {
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
       try {
-        // Try to call gtag - if it fails, might be blocked
         window.gtag('config', analyticsConfig.trackingId);
         checks.push({
           name: 'Ad Blocker',
@@ -113,7 +90,6 @@ export function AnalyticsHealth() {
     }
   }, [isVisible]);
 
-  // Show only in development
   if (!analyticsConfig.shouldShowDebugPanel()) return null;
 
   if (!isVisible) {
