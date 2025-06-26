@@ -21,11 +21,24 @@ export const useAnalyticsOnView = (
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && (!trackOnce || !hasTracked.current)) {
-          trackPortfolioEvent.sectionView(sectionName);
-          hasTracked.current = true;
+          // Add a small delay to ensure the element is truly visible
+          setTimeout(() => {
+            if (entry.isIntersecting) {
+              trackPortfolioEvent.sectionView(sectionName);
+              hasTracked.current = true;
+              
+              // Debug logging
+              if (import.meta.env.DEV) {
+                console.log(`👁️ Section viewed: ${sectionName}`);
+              }
+            }
+          }, 200);
         }
       },
-      { threshold }
+      { 
+        threshold,
+        rootMargin: '0px 0px -50px 0px' // Only trigger when element is 50px into viewport
+      }
     );
 
     observer.observe(element);

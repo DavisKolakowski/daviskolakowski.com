@@ -27,21 +27,27 @@ export const trackEvent = (
   value?: number
 ) => {
   if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', action, {
-      event_category: category,
-      event_label: label,
-      value: value,
-    });
-    
-    // Console log in development for debugging
-    if (import.meta.env.DEV) {
-      console.log(`📊 Analytics Event:`, {
-        action,
-        category,
-        label,
-        value
+    try {
+      window.gtag('event', action, {
+        event_category: category,
+        event_label: label,
+        value: value,
       });
+      
+      // Console log in development for debugging
+      if (import.meta.env.DEV) {
+        console.log(`📊 Analytics Event:`, {
+          action,
+          category,
+          label,
+          value
+        });
+      }
+    } catch (error) {
+      console.error('❌ Analytics tracking error:', error);
     }
+  } else {
+    console.warn('⚠️ Analytics not available for event:', { action, category, label, value });
   }
 };
 
@@ -89,7 +95,15 @@ export const trackPortfolioEvent = {
 };
 
 // Initialize analytics (call this in your main App component)
-export const initializeAnalytics = () => {
+export const initializeAnalytics = async () => {
+  // Wait for analytics to be ready
+  const isReady = await analyticsConfig.waitForAnalytics();
+  
+  if (!isReady) {
+    console.error('❌ Failed to initialize Google Analytics');
+    return;
+  }
+
   // Track initial page load
   if (typeof window !== 'undefined') {
     // In development, automatically grant consent for testing
@@ -98,9 +112,10 @@ export const initializeAnalytics = () => {
       console.log('🔧 Development mode: Analytics consent automatically granted for testing');
     }
     
+    // Enhanced page view tracking
     trackPageView(window.location.pathname + window.location.search);
 
-    // Track time on site
+    // Track time on site with more granular intervals
     const startTime = Date.now();
     const trackTimeOnSite = () => {
       const timeOnSite = Math.round((Date.now() - startTime) / 1000);
@@ -109,29 +124,62 @@ export const initializeAnalytics = () => {
 
     // Track time on site when user leaves
     window.addEventListener('beforeunload', trackTimeOnSite);
-
-    // Track scroll depth
-    let maxScrollDepth = 0;
-    const trackScrollDepthHandler = () => {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPercent = Math.round((scrollTop / docHeight) * 100);
-      
-      if (scrollPercent > maxScrollDepth && analyticsConfig.isScrollDepthInterval(scrollPercent)) {
-        maxScrollDepth = scrollPercent;
-        trackScrollDepth(scrollPercent);
+    
+    // Also track every 30 seconds for better engagement metrics
+    const timeInterval = setInterval(() => {
+      const timeOnSite = Math.round((Date.now() - startTime) / 1000);
+      if (timeOnSite % 30 === 0 && timeOnSite <= 300) { // Track up to 5 minutes
+        trackEvent('engagement_time', analyticsConfig.eventCategories.ENGAGEMENT, `${timeOnSite}s`, timeOnSite);
       }
+    }, 30000);
+    
+    // Clear interval on page unload
+    window.addEventListener('beforeunload', () => {
+      clearInterval(timeInterval);
+    });
+
+    // Track scroll depth with enhanced logic
+    let maxScrollDepth = 0;
+    let scrollTimer: number | null = null;
+    
+    const trackScrollDepthHandler = () => {
+      // Debounce scroll events
+      if (scrollTimer) clearTimeout(scrollTimer);
+      
+      scrollTimer = window.setTimeout(() => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = Math.round((scrollTop / docHeight) * 100);
+        
+        if (scrollPercent > maxScrollDepth && analyticsConfig.isScrollDepthInterval(scrollPercent)) {
+          maxScrollDepth = scrollPercent;
+          trackScrollDepth(scrollPercent);
+        }
+      }, 250);
     };
 
-    window.addEventListener('scroll', trackScrollDepthHandler);
+    window.addEventListener('scroll', trackScrollDepthHandler, { passive: true });
 
-    // Track errors
+    // Enhanced error tracking
     window.addEventListener('error', (error) => {
       trackPortfolioEvent.errorOccurred('JavaScript Error', error.message);
+      console.error('🐛 JavaScript Error tracked:', error);
     });
 
     window.addEventListener('unhandledrejection', (event) => {
       trackPortfolioEvent.errorOccurred('Promise Rejection', event.reason?.toString() || 'Unknown');
+      console.error('🐛 Promise Rejection tracked:', event);
     });
+
+    // Track page visibility changes
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        trackEvent('page_hidden', analyticsConfig.eventCategories.ENGAGEMENT, 'Page Hidden');
+      } else {
+        trackEvent('page_visible', analyticsConfig.eventCategories.ENGAGEMENT, 'Page Visible');
+      }
+    });
+
+    console.log('✅ Google Analytics initialized successfully');
   }
 };

@@ -33,6 +33,9 @@
     <!-- Configuration -->
     <script src="/config.js"></script>    <!-- Google tag (gtag.js) with Consent Mode -->
     <script>
+      // Ensure dataLayer exists first
+      window.dataLayer = window.dataLayer || [];
+      
       // Use configuration from config.js
       const gaConfig = window.APP_CONFIG.analytics;
       const siteConfig = window.APP_CONFIG.siteMetadata;
@@ -53,14 +56,31 @@
     </script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1760H3DK9"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
+      // gtag function definition
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
       // Initialize consent mode with default denied state for GDPR compliance
       gtag('consent', 'default', gaConfig.consentSettings);
 
-      gtag('config', gaConfig.trackingId, gaConfig.analyticsSettings);
+      // Configure GA with enhanced settings
+      gtag('config', gaConfig.trackingId, {
+        ...gaConfig.analyticsSettings,
+        // Add enhanced measurement settings
+        enhanced_measurement: true,
+        page_location: window.location.href,
+        page_title: document.title,
+        send_page_view: true
+      });
+      
+      // Debug logging in development
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        console.log('🔧 GA initialized with config:', {
+          trackingId: gaConfig.trackingId,
+          consent: gaConfig.consentSettings,
+          analytics: gaConfig.analyticsSettings
+        });
+      }
     </script>
   </head>
   <body>

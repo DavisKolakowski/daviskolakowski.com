@@ -25,7 +25,8 @@ export function CookieConsent() {
         updateGoogleConsent(devConsent);
         setIsVisible(false);
       } else {
-        setIsVisible(true);
+        // In production, show consent banner after a short delay
+        setTimeout(() => setIsVisible(true), 1000);
       }
     } else {
       const savedPreferences = JSON.parse(consent);
@@ -40,7 +41,22 @@ export function CookieConsent() {
         functionality_storage: prefs.functional ? 'granted' : 'denied',
         personalization_storage: prefs.marketing ? 'granted' : 'denied',
       };
+      
       window.gtag('consent', 'update', consentSettings);
+      
+      // Debug logging
+      if (import.meta.env.DEV) {
+        console.log('🍪 Cookie consent updated:', consentSettings);
+      }
+      
+      // Track consent choice
+      if (window.gtag) {
+        window.gtag('event', 'consent_update', {
+          event_category: 'privacy',
+          analytics_consent: prefs.analytics,
+          marketing_consent: prefs.marketing,
+        });
+      }
     }
   };
 

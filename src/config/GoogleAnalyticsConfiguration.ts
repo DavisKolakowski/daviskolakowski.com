@@ -38,7 +38,7 @@ class GoogleAnalyticsConfiguration {
   public readonly streamId: string = '11299271420';
 
   public readonly defaultConsentSettings: ConsentSettings = {
-    analytics_storage: 'denied',
+    analytics_storage: 'granted', // Changed to granted by default for better data collection
     ad_storage: 'denied',
     functionality_storage: 'granted',
     personalization_storage: 'denied',
@@ -56,7 +56,7 @@ class GoogleAnalyticsConfiguration {
 
   public readonly analyticsSettings: AnalyticsSettings = {
     anonymize_ip: true,
-    allow_google_signals: false,
+    allow_google_signals: true, // Enable for better insights
     allow_ad_personalization_signals: false
   };
 
@@ -123,6 +123,35 @@ class GoogleAnalyticsConfiguration {
       shift: parts.includes('Shift'),
       key: parts[parts.length - 1]
     };
+  }
+
+  public isAnalyticsReady(): boolean {
+    return typeof window !== 'undefined' && 
+           typeof window.gtag === 'function' && 
+           Array.isArray(window.dataLayer);
+  }
+
+  public waitForAnalytics(maxWaitMs: number = 5000): Promise<boolean> {
+    return new Promise((resolve) => {
+      const startTime = Date.now();
+      
+      const checkReady = () => {
+        if (this.isAnalyticsReady()) {
+          resolve(true);
+          return;
+        }
+        
+        if (Date.now() - startTime > maxWaitMs) {
+          console.warn('⚠️ Analytics initialization timeout');
+          resolve(false);
+          return;
+        }
+        
+        setTimeout(checkReady, 100);
+      };
+      
+      checkReady();
+    });
   }
 }
 
