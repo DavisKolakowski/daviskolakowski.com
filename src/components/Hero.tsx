@@ -46,7 +46,20 @@ export default function Hero() {
       <div className="text-overlay"></div>
       <div className="floating-elements"></div>
       <div className="max-w-6xl mx-auto container-padding grid md:grid-cols-2 gap-12 items-center hero-content">
-        <div className="space-y-8">          
+        {/* Profile Image - First on mobile, second on desktop */}
+        <div className="flex justify-center order-1 md:order-2">
+          <div className="relative">
+            <div className="w-80 h-80 bg-gradient-to-br from-primary to-accent rounded-full absolute -inset-2 animate-float opacity-40 hero-profile-glow"></div>
+            <img 
+              src={appConfig.assetPaths.profileImage}
+              alt={`${appConfig.personalInfo.name} - Professional Profile`} 
+              className="w-80 h-80 rounded-full object-cover border-4 border-card card-shadow-hover relative z-10"
+            />
+          </div>
+        </div>
+
+        {/* Text Content - Second on mobile, first on desktop */}
+        <div className="space-y-8 order-2 md:order-1">          
           <div className="space-y-6">            <h1 className="text-5xl md:text-6xl font-bold leading-tight hero-typewriter-container" ref={containerRef}>
               <TypewriterComponent />
               <span className="sr-only">Hi, I'm Davis</span>
@@ -75,7 +88,7 @@ export default function Hero() {
             </button>
           </div>
           
-          <div className="flex flex-col sm:flex-row gap-6 pt-4 text-sm hero-text-secondary">
+          <div className="flex flex-col sm:flex-row gap-6 pt-4 pb-8 text-sm hero-text-secondary">
             <div className="flex items-center gap-2">
               <MapPin className="w-4 h-4" />
               <span>{appConfig.personalInfo.location}</span>
@@ -84,17 +97,6 @@ export default function Hero() {
               <Mail className="w-4 h-4" />
               <span>{appConfig.personalInfo.email}</span>
             </div>
-          </div>
-        </div>
-        
-        <div className="flex justify-center">
-          <div className="relative">
-            <div className="w-80 h-80 bg-gradient-to-br from-primary to-accent rounded-full absolute -inset-2 animate-float opacity-40 hero-profile-glow"></div>
-            <img 
-              src={appConfig.assetPaths.profileImage}
-              alt={`${appConfig.personalInfo.name} - Professional Profile`} 
-              className="w-80 h-80 rounded-full object-cover border-4 border-card card-shadow-hover relative z-10"
-            />
           </div>
         </div>
       </div>
