@@ -15,10 +15,8 @@ export function AnalyticsDebug() {
   const [events, setEvents] = useState<AnalyticsEvent[]>([]);
   const [isVisible, setIsVisible] = useState(false);
     useEffect(() => {
-    // Only show in development
     if (!analyticsConfig.shouldShowDebugPanel()) return;
 
-    // Override gtag to capture events for debugging
     const originalGtag = window.gtag;
     window.gtag = function(command: string, ...args: any[]) {
       if (command === 'event' && args[0]) {
@@ -29,14 +27,13 @@ export function AnalyticsDebug() {
           category: params?.event_category || 'unknown',
           label: params?.event_label,
           value: params?.value
-        }].slice(-analyticsConfig.debugSettings.maxEvents)); // Use configured max events
+        }].slice(-analyticsConfig.debugSettings.maxEvents));
       }
       if (originalGtag) {
         originalGtag(command, ...args);
       }
     };
 
-    // Show/hide with keyboard shortcut
     const handleKeyPress = (e: KeyboardEvent) => {
       const shortcut = analyticsConfig.getDebugKeyboardShortcut();
       if (e.ctrlKey === shortcut.ctrl && e.shiftKey === shortcut.shift && e.key === shortcut.key) {

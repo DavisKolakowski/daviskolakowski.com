@@ -4,21 +4,17 @@
  * This file is manually synchronized with src/config/ files
  */
 
+// Ensure dataLayer exists before any gtag calls
+window.dataLayer = window.dataLayer || [];
+
 window.APP_CONFIG = {
   analytics: {
     trackingId: 'G-Q1760H3DK9',
-    consentSettings: {
-      analytics_storage: 'denied',
-      ad_storage: 'denied',
-      functionality_storage: 'granted',
-      personalization_storage: 'denied',
-      security_storage: 'granted',
-      wait_for_update: 500
-    },
     analyticsSettings: {
       anonymize_ip: true,
-      allow_google_signals: false,
-      allow_ad_personalization_signals: false
+      allow_google_signals: true,
+      allow_ad_personalization_signals: false,
+      send_page_view: true
     }
   },
   siteMetadata: {

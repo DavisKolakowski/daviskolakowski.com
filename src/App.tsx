@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AnalyticsDebug } from "@/components/ui/analytics-debug";
 import { AnalyticsTest } from "@/components/ui/analytics-test";
-import { CookieConsent } from "@/components/ui/cookie-consent";
+import { AnalyticsHealth } from "@/components/ui/analytics-health";
 import { initializeAnalytics } from "@/lib/analytics";
 import Home from "@/pages/home";
 
@@ -19,7 +19,7 @@ function App() {
       <Home />
       <AnalyticsDebug />
       <AnalyticsTest />
-      <CookieConsent />
+      <AnalyticsHealth />
     </TooltipProvider>
   );
 }
