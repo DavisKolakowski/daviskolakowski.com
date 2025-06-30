@@ -18,9 +18,7 @@ export default function About() {
               {appConfig.siteMetadata.description}
             </p>
             <p className="text-lg leading-relaxed text-muted-foreground">
-              At {appConfig.personalInfo.company}, I've led critical projects that have resulted in significant efficiency gains, 
-              including reducing an 18-hour manual process to just 27 minutes and cutting report development 
-              time by 95%. I thrive in collaborative environments and enjoy mentoring junior developers.
+              Currently serving as {appConfig.personalInfo.currentPosition} at {appConfig.personalInfo.company}, where I'm leading the development of Pulse, an innovative real-time nightlife discovery platform. Skilled in collaborating with cross-functional teams to deliver scalable features that acquire, activate, and retain users. I've previously achieved significant efficiency gains including reducing an 18-hour manual process to just 27 minutes and cutting report development time by 95%.
             </p>
           </div>
           
