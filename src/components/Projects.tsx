@@ -3,10 +3,32 @@ import { GitHubIcon } from "./ui/github-icon";
 import { useAnalyticsOnView } from "@/hooks/use-analytics";
 import { trackPortfolioEvent } from "@/lib/analytics";
 
+interface Project {
+  title: string;
+  description: string;
+  githubUrl: string;
+  liveUrl?: string;
+  technologies: string[];
+  highlights: string[];
+}
+
 export default function Projects() {
   const projectsRef = useAnalyticsOnView("projects");
 
-  const projects = [
+  const projects: Project[] = [
+    {
+      title: "Pulse Nightlife Discovery Platform",
+      description: "Conceived and developed an innovative real-time nightlife discovery platform with privacy-first, location-based design featuring a unique three-category classification system (Venue Types, Tags, Vibes) for community-driven insights.",
+      githubUrl: "https://github.com/MirthSystems/pulse-by-mirth-systems",
+      liveUrl: "https://pulse.mirthsystems.com/",
+      technologies: ["Vue.js", ".NET Core", "PostgreSQL", "Auth0", "Azure", "Docker"],
+      highlights: [
+        "Real-time messaging with 15-minute ephemeral content",
+        "PostgreSQL-based recommendation engine",
+        "Scalable microservices architecture",
+        "Privacy-first location-based discovery"
+      ]
+    },
     {
       title: "Linear Content Automation Platform",
       description: "Architected and developed a C#/.NET application that automated critical linear advertising content validation, reducing nightly quality control process from 18 person-hours to 27 minutes (97% reduction).",
@@ -53,8 +75,8 @@ export default function Projects() {
     }
   ];
 
-  const handleProjectLinkClick = (projectTitle: string) => {
-    trackPortfolioEvent.projectLinkClick(projectTitle, 'github');
+  const handleProjectLinkClick = (projectTitle: string, linkType: 'demo' | 'github' = 'github') => {
+    trackPortfolioEvent.projectLinkClick(projectTitle, linkType);
   };
 
   const handleProjectView = (projectTitle: string) => {
@@ -80,17 +102,32 @@ export default function Projects() {
                 <h3 className="text-2xl font-bold text-secondary group-hover:text-primary transition-smooth">
                   {project.title}
                 </h3>
-                <a 
-                  href={project.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-primary transition-smooth"
-                  aria-label={`View ${project.title} on GitHub`}
-                  title={`View ${project.title} on GitHub`}
-                  onClick={() => handleProjectLinkClick(project.title)}
-                >
-                  <GitHubIcon className="w-6 h-6" />
-                </a>
+                <div className="flex gap-3">
+                  {project.liveUrl && (
+                    <a 
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-muted-foreground hover:text-accent transition-smooth"
+                      aria-label={`View ${project.title} live demo`}
+                      title={`View ${project.title} live demo`}
+                      onClick={() => handleProjectLinkClick(project.title, 'demo')}
+                    >
+                      <ExternalLink className="w-6 h-6" />
+                    </a>
+                  )}
+                  <a 
+                    href={project.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground hover:text-primary transition-smooth"
+                    aria-label={`View ${project.title} on GitHub`}
+                    title={`View ${project.title} on GitHub`}
+                    onClick={() => handleProjectLinkClick(project.title, 'github')}
+                  >
+                    <GitHubIcon className="w-6 h-6" />
+                  </a>
+                </div>
               </div>
               
               <p className="text-muted-foreground mb-6 leading-relaxed">
@@ -118,16 +155,32 @@ export default function Projects() {
                   ))}
                 </div>
                 
-                <a 
-                  href={project.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center text-accent font-semibold hover:text-primary transition-smooth cursor-pointer"
-                  onClick={() => handleProjectLinkClick(project.title)}
-                >
-                  <span>View Project</span>
-                  <ExternalLink className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </a>
+                <div className="flex justify-between items-center">
+                  <a 
+                    href={project.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center text-primary font-semibold hover:text-accent transition-smooth cursor-pointer"
+                    onClick={() => handleProjectLinkClick(project.title, 'github')}
+                  >
+                    <GitHubIcon className="mr-2 w-4 h-4" />
+                    <span>View Code</span>
+                    <ExternalLink className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </a>
+                  
+                  {project.liveUrl && (
+                    <a 
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center text-accent font-semibold hover:text-primary transition-smooth cursor-pointer"
+                      onClick={() => handleProjectLinkClick(project.title, 'demo')}
+                    >
+                      <span>Live Demo</span>
+                      <ExternalLink className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           ))}

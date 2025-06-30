@@ -1,4 +1,4 @@
-import { Code, Layers, Database, Cloud } from "lucide-react";
+import { Code, Layers, Database, Cloud, Wrench, Network } from "lucide-react";
 import { useAnalyticsOnView } from "@/hooks/use-analytics";
 import { trackPortfolioEvent } from "@/lib/analytics";
 
@@ -9,22 +9,32 @@ export default function Skills() {
     {
       icon: Code,
       title: "Languages",
-      skills: ["JavaScript", "TypeScript", "C#", "TSQL", "HTML", "CSS"]
+      skills: ["JavaScript", "TypeScript", "C#", "TSQL", "HTML", "CSS", "PowerShell", "Bicep", "Power Query"]
     },
     {
       icon: Layers,
-      title: "Frameworks",
-      skills: ["React", "ASP.NET Core", ".NET 8", ".NET Framework", "Vue.js", "Blazor"]
+      title: "Frameworks & Libraries",
+      skills: ["Vue.js", "React", "ASP.NET Core", ".NET", ".NET Framework 4.6+", "Blazor", ".NET Aspire"]
     },
     {
       icon: Database,
-      title: "Database & Tools",
-      skills: ["SQL Server", "PostgreSQL", "Azure DevOps", "Visual Studio", "Azure Data Factory"]
+      title: "Databases",
+      skills: ["SQL Server", "PostgreSQL", "PostGIS", "Stored Procedures", "Views", "ETL Pipelines", "Spatial Data"]
+    },
+    {
+      icon: Network,
+      title: "Architecture",
+      skills: ["RESTful APIs", "Microservices", "Authentication Systems", "JWT", "OAuth/OpenID Connect", "RabbitMQ", "Job Scheduling"]
     },
     {
       icon: Cloud,
-      title: "Cloud & DevOps",
-      skills: ["Azure", "AWS", "CI/CD Pipelines", "Microservices", "RESTful APIs"]
+      title: "DevOps & Cloud",
+      skills: ["Azure DevOps", "CI/CD Pipelines", "Automated Testing", "Azure", "AWS", "Docker", "Prometheus", "Azure Maps"]
+    },
+    {
+      icon: Wrench,
+      title: "Tools & Analytics",
+      skills: ["Visual Studio", "VS Code", "Azure Data Factory", "Tableau Integration", "Excel", "Power BI", "Elastic Stack"]
     }
   ];
 
@@ -40,7 +50,7 @@ export default function Skills() {
           <div className="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto"></div>
         </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {skillCategories.map((category, index) => (
             <div 
               key={index}

@@ -18,10 +18,10 @@ window.APP_CONFIG = {
     }
   },
   siteMetadata: {
-    title: 'Davis Kolakowski - Software Engineer',
-    description: 'Experienced Software Engineer with 8+ years in full-stack development, specializing in .NET, React, Vue, and TypeScript. Portfolio showcasing innovative solutions and technical expertise.',
-    keywords: 'Davis Kolakowski, Software Engineer, .NET, React, TypeScript, Full Stack Developer, Comcast, Portfolio',
-    url: 'https://daviskolakowski.dev/',
+    title: 'Davis Kolakowski - .NET Software Engineer',
+    description: 'Experienced Software Engineer with 8+ years in full-stack development, specializing in .NET, React, Vue, and TypeScript. Currently Lead Software Engineer at Mirth Systems, building innovative nightlife discovery platforms.',
+    keywords: 'Davis Kolakowski, Software Engineer, .NET, React, TypeScript, Vue.js, Full Stack Developer, Mirth Systems, Pulse Platform, Portfolio',
+    url: 'https://daviskolakowski.com/',
     themeColor: '#ffffff'
   },
   assets: {
