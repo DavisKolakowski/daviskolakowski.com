@@ -59,7 +59,7 @@ class AppConfiguration {
     location: "Williamsport, PA",
     experience: "8+ Years Experience",
     currentPosition: "Lead Software Engineer",
-    company: "Mirth Systems, LLC"
+    company: "Mirth Systems"
   };
 
   public readonly socialLinks: SocialLinks = {
